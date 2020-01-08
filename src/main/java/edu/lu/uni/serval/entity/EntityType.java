@@ -1,8 +1,9 @@
 package edu.lu.uni.serval.entity;
 
 /**
- * All types for source code entities that are used by ChangeDistiller to build up the AST (abstract syntax tree). Most
- * are taken from {@link org.eclipse.jdt.core.dom.ASTNode}.
+ * All types for source code entities that are used by ChangeDistiller to build
+ * up the AST (abstract syntax tree). Most are taken from
+ * {@link org.eclipse.jdt.core.dom.ASTNode}.
  */
 public enum EntityType {
     ANNOTATION_TYPE_DECLARATION(true),
@@ -118,7 +119,7 @@ public enum EntityType {
 
     /**
      * Returns number of defined entity types.
-     * 
+     *
      * @return number of entity types.
      */
     public static int getNumberOfEntityTypes() {
@@ -126,20 +127,24 @@ public enum EntityType {
     }
 
     /**
-     * Returns whether changes occurred on this source code entity type are extracted by ChangeDistiller or not (e.g.
-     * changes in the <code>finally</code> clause are ignored).
-     * 
-     * @return <code>true</code> if changes on this entity type are considered and extracted, <code>false</code> otherwise.
+     * Returns whether changes occurred on this source code entity type are
+     * extracted by ChangeDistiller or not (e.g. changes in the
+     * <code>finally</code> clause are ignored).
+     *
+     * @return <code>true</code> if changes on this entity type are considered
+     * and extracted, <code>false</code> otherwise.
      */
     public boolean isValidChange() {
         return fIsValidChange;
     }
 
     /**
-     * Returns whether the given entity type is a type of a type declaration or not.
-     * 
+     * Returns whether the given entity type is a type of a type declaration or
+     * not.
+     *
      * @param type to analyze
-     * @return <code>true</code> if given entity type is a type, <code>false</code> otherwise.
+     * @return <code>true</code> if given entity type is a type,
+     * <code>false</code> otherwise.
      */
     public static boolean isType(EntityType type) {
         switch (type) {
@@ -157,9 +162,10 @@ public enum EntityType {
 
     /**
      * Returns whether the given entity type is a statement or not.
-     * 
+     *
      * @param type to analyze
-     * @return <code>true</code> if given entity type is a statement, <code>false</code> otherwise.
+     * @return <code>true</code> if given entity type is a statement,
+     * <code>false</code> otherwise.
      */
     public static boolean isAtStatementLevel(EntityType type) {
         switch (type) {

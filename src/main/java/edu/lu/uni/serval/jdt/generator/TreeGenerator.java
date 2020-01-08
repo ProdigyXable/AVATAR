@@ -1,5 +1,6 @@
 package edu.lu.uni.serval.jdt.generator;
 
+import edu.lu.uni.serval.jdt.tree.TreeContext;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,16 +9,15 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 
-import edu.lu.uni.serval.jdt.tree.TreeContext;
-
 public abstract class TreeGenerator {
 
     protected abstract TreeContext generate(Reader r) throws IOException;
-    
+
     protected abstract TreeContext generate(Reader r, int astParserType) throws IOException;
 
     /**
      * Generate ASTs for Java code from the IOReader of Java code.
+     *
      * @param r of the IOReader of Java code.
      * @return
      * @throws IOException
@@ -30,6 +30,7 @@ public abstract class TreeGenerator {
 
     /**
      * Generate ASTs for Java code from the Java code file.
+     *
      * @param fileName of the Java code file with complete and correct path.
      * @return
      * @throws IOException
@@ -40,6 +41,7 @@ public abstract class TreeGenerator {
 
     /**
      * Generate ASTs for Java code from the Java code file.
+     *
      * @param file of the Java code file object.
      * @return
      * @throws IOException
@@ -50,6 +52,7 @@ public abstract class TreeGenerator {
 
     /**
      * Generate ASTs for Java code from InputStream of Java code.
+     *
      * @param stream of the InputStream of Java code.
      * @return
      * @throws IOException
@@ -60,6 +63,7 @@ public abstract class TreeGenerator {
 
     /**
      * Generate ASTs for Java code from the Java code string.
+     *
      * @param codeString of the Java code string.
      * @return
      * @throws IOException
@@ -67,11 +71,14 @@ public abstract class TreeGenerator {
     public TreeContext generateFromCodeString(String codeString) throws IOException {
         return generateFromReader(new StringReader(codeString));
     }
-    
+
     /**
-     * Generate ASTs for Java code from the IOReader of Java code with the specific ASTParser.
+     * Generate ASTs for Java code from the IOReader of Java code with the
+     * specific ASTParser.
+     *
      * @param r of the IOReader of Java code.
-     * @param astParserType of the specific ASTParser. e.g., ASTParser.K_STATEMENTS.
+     * @param astParserType of the specific ASTParser. e.g.,
+     * ASTParser.K_STATEMENTS.
      * @return
      * @throws IOException
      */
@@ -82,9 +89,13 @@ public abstract class TreeGenerator {
     }
 
     /**
-     * Generate ASTs for Java code from the Java code file with the specific ASTParser.
-     * @param fileName of the Java code file name with complete and correct path.
-     * @param astParserType of the specific ASTParser. e.g., ASTParser.K_STATEMENTS.
+     * Generate ASTs for Java code from the Java code file with the specific
+     * ASTParser.
+     *
+     * @param fileName of the Java code file name with complete and correct
+     * path.
+     * @param astParserType of the specific ASTParser. e.g.,
+     * ASTParser.K_STATEMENTS.
      * @return
      * @throws IOException
      */
@@ -93,9 +104,12 @@ public abstract class TreeGenerator {
     }
 
     /**
-     * Generate ASTs for Java code from the Java code file with the specific ASTParser.
+     * Generate ASTs for Java code from the Java code file with the specific
+     * ASTParser.
+     *
      * @param file of the Java code file object.
-     * @param astParserType of the specific ASTParser. e.g., ASTParser.K_STATEMENTS.
+     * @param astParserType of the specific ASTParser. e.g.,
+     * ASTParser.K_STATEMENTS.
      * @return
      * @throws IOException
      */
@@ -104,9 +118,12 @@ public abstract class TreeGenerator {
     }
 
     /**
-     * Generate ASTs for Java code from the InputStream of Java code with the specific ASTParser.
+     * Generate ASTs for Java code from the InputStream of Java code with the
+     * specific ASTParser.
+     *
      * @param stream of the InputStream of Java code.
-     * @param astParserType of the specific ASTParser. e.g., ASTParser.K_STATEMENTS.
+     * @param astParserType of the specific ASTParser. e.g.,
+     * ASTParser.K_STATEMENTS.
      * @return
      * @throws IOException
      */
@@ -116,8 +133,10 @@ public abstract class TreeGenerator {
 
     /**
      * Generate ASTs for Java code fragment file with the specific ASTParser.
+     *
      * @param codeFragment of Java code fragment.
-     * @param astParserType of the specific ASTParser. e.g., ASTParser.K_STATEMENTS.
+     * @param astParserType of the specific ASTParser. e.g.,
+     * ASTParser.K_STATEMENTS.
      * @return
      * @throws IOException
      */

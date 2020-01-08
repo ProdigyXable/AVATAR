@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration debug="false">
-	<property name="APP_NAME" value="Avatar"></property>
-	<contextName>${APP_NAME}</contextName>
+    <property name="APP_NAME" value="Avatar"></property>
+    <contextName>${APP_NAME}</contextName>
 
     <property name="LOG_HOME" value="logs" />  
     
@@ -26,9 +26,9 @@
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
         </encoder>
-       <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-         <MaxFileSize>10MB</MaxFileSize>
-       </triggeringPolicy>
+        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>10MB</MaxFileSize>
+        </triggeringPolicy>
     </appender>
 
     <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG" additivity="false" /> 

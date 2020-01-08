@@ -50,7 +50,8 @@ public interface ITree {
     void setChildren(List<ITree> children);
 
     /**
-     * @return the position of the child, or -1 if the given child is not in the children list.
+     * @return the position of the child, or -1 if the given child is not in the
+     * children list.
      */
     int getChildPosition(ITree child);
 
@@ -67,17 +68,20 @@ public interface ITree {
     boolean isLeaf();
 
     /**
-     * @return all the descendants (children, children of children, etc.) of the tree, using a pre-order.
+     * @return all the descendants (children, children of children, etc.) of the
+     * tree, using a pre-order.
      */
     List<ITree> getDescendants();
 
     /**
-     * Set the parent of this node. The parent won't have this node in its children list
+     * Set the parent of this node. The parent won't have this node in its
+     * children list
      */
     void setParent(ITree parent);
 
     /**
-     * Set the parent of this node. The parent will have this node in its children list, at the last position
+     * Set the parent of this node. The parent will have this node in its
+     * children list, at the last position
      */
     void setParentAndUpdateChildren(ITree parent);
 
@@ -89,7 +93,8 @@ public interface ITree {
     ITree getParent();
 
     /**
-     * @return the list of all parents of the node (parent, parent of parent, etc.)
+     * @return the list of all parents of the node (parent, parent of parent,
+     * etc.)
      */
     List<ITree> getParents();
 
@@ -99,8 +104,8 @@ public interface ITree {
     int positionInParent();
 
     /**
-     * Make a deep copy of the tree.
-     * Deep copy of node however shares Metadata
+     * Make a deep copy of the tree. Deep copy of node however shares Metadata
+     *
      * @return a deep copy of the tree.
      */
     ITree deepCopy();
@@ -115,7 +120,8 @@ public interface ITree {
 
     /**
      * @see TreeUtils#computeHeight(ITree)
-     * @return the height of the tree, defined as the maximal depth of its descendants.
+     * @return the height of the tree, defined as the maximal depth of its
+     * descendants.
      */
     int getHeight();
 
@@ -171,20 +177,23 @@ public interface ITree {
     /**
      * @see #toStaticHashString()
      * @see #getHash()
-     * @return a boolean indicating if the two trees are isomorphics, defined has
-     *     having the same hash and the same hash serialization.
+     * @return a boolean indicating if the two trees are isomorphics, defined
+     * has having the same hash and the same hash serialization.
      */
     boolean isIsomorphicTo(ITree tree);
 
     /**
      * Indicate whether or not the tree is similar to the given tree.
+     *
      * @return true if they are compatible and have same label, false either
      */
     boolean hasSameTypeAndLabel(ITree t);
 
     /**
      * Refresh hash, size, depth and height of the tree.
-     * @see edu.lu.uni.serval.jdt.tree.hash.github.gumtreediff.tree.hash.HashGenerator
+     *
+     * @see
+     * edu.lu.uni.serval.jdt.tree.hash.github.gumtreediff.tree.hash.HashGenerator
      * @see TreeUtils#computeDepth(ITree)
      * @see TreeUtils#computeHeight(ITree)
      * @see TreeUtils#computeSize(ITree)
@@ -204,7 +213,7 @@ public interface ITree {
     Object setMetadata(String key, Object value);
 
     Iterator<Entry<String, Object>> getMetadata();
-    
+
     public abstract String getChildrenLabels();
 
 }

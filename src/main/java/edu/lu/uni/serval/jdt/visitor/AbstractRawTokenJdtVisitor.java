@@ -1,13 +1,13 @@
 package edu.lu.uni.serval.jdt.visitor;
 
-
 import org.eclipse.jdt.core.dom.ASTNode;
 
 /**
- * Create AbstractRowTokenJdtVisitor by extending AbstractJdtVisitor and overriding pushNode method.
- * 
+ * Create AbstractRowTokenJdtVisitor by extending AbstractJdtVisitor and
+ * overriding pushNode method.
+ *
  * Remove the ASTNode type in trees.
- * 
+ *
  * @author kui.liu
  *
  */

@@ -1,5 +1,6 @@
 package edu.lu.uni.serval.jdt.tree;
 
+import edu.lu.uni.serval.jdt.tree.hash.HashUtils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -8,8 +9,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
-import edu.lu.uni.serval.jdt.tree.hash.HashUtils;
 
 public abstract class AbstractTree implements ITree {
 
@@ -26,8 +25,8 @@ public abstract class AbstractTree implements ITree {
     protected int depth;
 
     protected int hash;
-    
-   @Override
+
+    @Override
     public int getChildPosition(ITree child) {
         return getChildren().indexOf(child);
     }
@@ -82,9 +81,9 @@ public abstract class AbstractTree implements ITree {
     @Override
     public List<ITree> getParents() {
         List<ITree> parents = new ArrayList<>();
-        if (getParent() == null)
+        if (getParent() == null) {
             return parents;
-        else {
+        } else {
             parents.add(getParent());
             parents.addAll(getParent().getParents());
         }
@@ -103,10 +102,11 @@ public abstract class AbstractTree implements ITree {
 
     @Override
     public boolean isIsomorphicTo(ITree tree) {
-        if (this.getHash() != tree.getHash())
+        if (this.getHash() != tree.getHash()) {
             return false;
-        else
+        } else {
             return this.toStaticHashString().equals(tree.toStaticHashString());
+        }
     }
 
     @Override
@@ -126,10 +126,11 @@ public abstract class AbstractTree implements ITree {
 
     @Override
     public boolean hasSameTypeAndLabel(ITree t) {
-        if (!hasSameType(t))
+        if (!hasSameType(t)) {
             return false;
-        else if (!getLabel().equals(t.getLabel()))
+        } else if (!getLabel().equals(t.getLabel())) {
             return false;
+        }
         return true;
     }
 
@@ -166,10 +167,11 @@ public abstract class AbstractTree implements ITree {
     @Override
     public int positionInParent() {
         ITree p = getParent();
-        if (p == null)
+        if (p == null) {
             return -1;
-        else
+        } else {
             return p.getChildren().indexOf(this);
+        }
     }
 
     @Override
@@ -210,8 +212,9 @@ public abstract class AbstractTree implements ITree {
         StringBuilder b = new StringBuilder();
         b.append(OPEN_SYMBOL);
         b.append(this.toShortString());
-        for (ITree c: this.getChildren())
+        for (ITree c : this.getChildren()) {
             b.append(c.toStaticHashString());
+        }
         b.append(CLOSE_SYMBOL);
         return b.toString();
     }
@@ -229,39 +232,43 @@ public abstract class AbstractTree implements ITree {
     @Override
     public String toTreeString() {
         StringBuilder b = new StringBuilder();
-        for (ITree t : TreeUtils.preOrder(this))
+        for (ITree t : TreeUtils.preOrder(this)) {
             b.append(indent(t) + t.toShortString() + "\n");
+        }
         return b.toString();
     }
 
     private String indent(ITree t) {
         StringBuilder b = new StringBuilder();
-        for (int i = 0; i < t.getDepth(); i++)
+        for (int i = 0; i < t.getDepth(); i++) {
             b.append("\t");
+        }
         return b.toString();
     }
 
     @Override
     public String toPrettyString(TreeContext ctx) {
-        if (hasLabel())
+        if (hasLabel()) {
             return ctx.getTypeLabel(this) + ": " + getLabel();
-        else
+        } else {
             return ctx.getTypeLabel(this);
+        }
     }
-    
+
     @Override
-   	public String getChildrenLabels() {
-       	// Rewritten by kui.
-       	StringBuffer b = new StringBuffer();
-       	for (ITree child: getChildren())
-       		if (!"".equals(child.getLabel()))
-       			b.append(child.getLabel() + " ");
-       	return b.toString().trim();
-   	}
-       
-       
+    public String getChildrenLabels() {
+        // Rewritten by kui.
+        StringBuffer b = new StringBuffer();
+        for (ITree child : getChildren()) {
+            if (!"".equals(child.getLabel())) {
+                b.append(child.getLabel() + " ");
+            }
+        }
+        return b.toString().trim();
+    }
 
     public static class FakeTree extends AbstractTree {
+
         public FakeTree(ITree... trees) {
             children = new ArrayList<>(trees.length);
             children.addAll(Arrays.asList(trees));
@@ -303,24 +310,24 @@ public abstract class AbstractTree implements ITree {
 
         @Override
         public int getPos() {
-            return Collections.min(children, 
-            		new Comparator<ITree>(){ // JDK 1.7
-						@Override
-						public int compare(ITree t1, ITree t2) {
-							return t2.getPos() - t1.getPos();
-						}
-		            }).getPos();
+            return Collections.min(children,
+                    new Comparator<ITree>() { // JDK 1.7
+                @Override
+                public int compare(ITree t1, ITree t2) {
+                    return t2.getPos() - t1.getPos();
+                }
+            }).getPos();
         }
 
         @Override
         public int getEndPos() {
-        	ITree t = Collections.max(children, new Comparator<ITree>(){  // JDK 1.7
-						@Override
-						public int compare(ITree t1, ITree t2) {
-							return t2.getPos() - t1.getPos();
-						}
-		            	
-		            });
+            ITree t = Collections.max(children, new Comparator<ITree>() {  // JDK 1.7
+                @Override
+                public int compare(ITree t1, ITree t2) {
+                    return t2.getPos() - t1.getPos();
+                }
+
+            });
             return t.getPos() + t.getLength();
         }
 
@@ -391,6 +398,7 @@ public abstract class AbstractTree implements ITree {
     }
 
     protected static class EmptyEntryIterator implements Iterator<Map.Entry<String, Object>> {
+
         @Override
         public boolean hasNext() {
             return false;
@@ -401,10 +409,10 @@ public abstract class AbstractTree implements ITree {
             throw new NoSuchElementException();
         }
 
-		@Override
-		public void remove() {
-			// TODO Auto-generated method stub
-			
-		}
+        @Override
+        public void remove() {
+            // TODO Auto-generated method stub
+
+        }
     }
 }

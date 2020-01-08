@@ -1,11 +1,12 @@
 package edu.lu.uni.serval.dataprepare;
 
 public interface ClassFilter {
-	boolean acceptClass(Class<?> clazz);
 
-	boolean acceptClassName(String className);
+    boolean acceptClass(Class<?> clazz);
 
-	boolean acceptInnerClass();
+    boolean acceptClassName(String className);
 
-	boolean searchInJars();
+    boolean acceptInnerClass();
+
+    boolean searchInJars();
 }

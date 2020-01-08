@@ -1,14 +1,12 @@
 package edu.lu.uni.serval.jdt.visitor;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-
 import edu.lu.uni.serval.entity.EntityType;
 import edu.lu.uni.serval.jdt.tree.ITree;
 import edu.lu.uni.serval.jdt.tree.TreeContext;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
 
 public abstract class AbstractJdtVisitor extends ASTVisitor {
 
@@ -41,9 +39,9 @@ public abstract class AbstractJdtVisitor extends ASTVisitor {
         t.setPos(startPosition);
         t.setLength(length);
 
-        if (trees.isEmpty())
+        if (trees.isEmpty()) {
             context.setRoot(t);
-        else {
+        } else {
             ITree parent = trees.peek();
             t.setParentAndUpdateChildren(parent);
         }

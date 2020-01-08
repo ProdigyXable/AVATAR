@@ -9,20 +9,22 @@ import java.util.Map.Entry;
  * Meta-data.
  */
 public class AssociationMap {
+
     // FIXME or not, should we inline this class ? or use Entry to only have one list ? ... or both
     ArrayList<Object> values = new ArrayList<>();
     ArrayList<String> keys = new ArrayList<>();
 
     public Object get(String key) {
         int idx = keys.indexOf(key);
-        if (idx == -1)
+        if (idx == -1) {
             return null;
+        }
         return values.get(idx);
     }
 
     /**
-     * set meta-data `key` with `value` and returns the previous value
-     * This method won't remove if value == null
+     * set meta-data `key` with `value` and returns the previous value This
+     * method won't remove if value == null
      */
     public Object set(String key, Object value) {
         int idx = keys.indexOf(key);
@@ -36,8 +38,9 @@ public class AssociationMap {
 
     public Object remove(String key) {
         int idx = keys.indexOf(key);
-        if (idx == -1)
+        if (idx == -1) {
             return null;
+        }
         if (idx == keys.size() - 1) {
             keys.remove(idx);
             return values.remove(idx);
@@ -49,6 +52,7 @@ public class AssociationMap {
     public Iterator<Entry<String, Object>> iterator() {
         return new Iterator<Entry<String, Object>>() {
             int currentPos = 0;
+
             @Override
             public boolean hasNext() {
                 return currentPos < keys.size();
@@ -61,11 +65,11 @@ public class AssociationMap {
                 return e;
             }
 
-			@Override
-			public void remove() {
-				// TODO Auto-generated method stub
-				
-			}
+            @Override
+            public void remove() {
+                // TODO Auto-generated method stub
+
+            }
         };
     }
 }

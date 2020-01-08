@@ -5,54 +5,54 @@ import java.util.List;
 
 public class BugCollection implements Comparable<BugCollection> {
 
-	private String projectName;
-	private Date releasedTime;
-	private List<BugInstance> bugInstances;
+    private String projectName;
+    private Date releasedTime;
+    private List<BugInstance> bugInstances;
 
-	public String getProjectName() {
-		return projectName;
-	}
+    public String getProjectName() {
+        return projectName;
+    }
 
-	public void setProjectName(String projectName) {
-		this.projectName = projectName;
-	}
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
-	public Date getReleasedTime() {
-		return releasedTime;
-	}
+    public Date getReleasedTime() {
+        return releasedTime;
+    }
 
-	public void setReleasedTime(Date releasedTime) {
-		this.releasedTime = releasedTime;
-	}
+    public void setReleasedTime(Date releasedTime) {
+        this.releasedTime = releasedTime;
+    }
 
-	public List<BugInstance> getBugInstances() {
-		return bugInstances;
-	}
+    public List<BugInstance> getBugInstances() {
+        return bugInstances;
+    }
 
-	public void setBugInstances(List<BugInstance> bugInstances) {
-		this.bugInstances = bugInstances;
-	}
-	
-	public BugCollection(String projectName, List<BugInstance> bugInstances) {
-		super();
-		this.projectName = projectName;
-		this.bugInstances = bugInstances;
-	}
+    public void setBugInstances(List<BugInstance> bugInstances) {
+        this.bugInstances = bugInstances;
+    }
 
-	public BugCollection(String projectName, Date releasedTime, List<BugInstance> bugInstances) {
-		super();
-		this.projectName = projectName;
-		this.releasedTime = releasedTime;
-		this.bugInstances = bugInstances;
-	}
+    public BugCollection(String projectName, List<BugInstance> bugInstances) {
+        super();
+        this.projectName = projectName;
+        this.bugInstances = bugInstances;
+    }
 
-	@Override
-	public int compareTo(BugCollection bugCollection) {
-		return this.projectName.compareTo(bugCollection.projectName);
-	}
-	
-	@Override
-	public String toString() {
-		return this.projectName;
-	}
+    public BugCollection(String projectName, Date releasedTime, List<BugInstance> bugInstances) {
+        super();
+        this.projectName = projectName;
+        this.releasedTime = releasedTime;
+        this.bugInstances = bugInstances;
+    }
+
+    @Override
+    public int compareTo(BugCollection bugCollection) {
+        return this.projectName.compareTo(bugCollection.projectName);
+    }
+
+    @Override
+    public String toString() {
+        return this.projectName;
+    }
 }

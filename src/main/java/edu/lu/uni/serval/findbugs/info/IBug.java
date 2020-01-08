@@ -1,38 +1,38 @@
 package edu.lu.uni.serval.findbugs.info;
 
 public interface IBug {
-	
-	public String getType();
 
-	public void setType(String type);
+    public String getType();
 
-	public int getPriority();
+    public void setType(String type);
 
-	public void setPriority(int priority);
+    public int getPriority();
 
-	public int getRank();
+    public void setPriority(int priority);
 
-	public void setRank(int rank);
-	
-	public String getAbbrev();
+    public int getRank();
 
-	public void setAbbrev(String abbrev);
+    public void setRank(int rank);
 
-	public String getCategory();
+    public String getAbbrev();
 
-	public void setCategory(String category);
+    public void setAbbrev(String abbrev);
 
-	public String getSourcePath();
+    public String getCategory();
 
-	public void setSourcePath(String sourcePath);
+    public void setCategory(String category);
 
-	public int getStartOfSourceLine();
+    public String getSourcePath();
 
-	public void setStartOfSourceLine(int startOfSourceLine);
+    public void setSourcePath(String sourcePath);
 
-	public int getEndOfSourceLine();
+    public int getStartOfSourceLine();
 
-	public void setEndOfSourceLine(int endOfSourceLine);
+    public void setStartOfSourceLine(int startOfSourceLine);
 
-	public boolean equals(BugInstance bugInstance);
+    public int getEndOfSourceLine();
+
+    public void setEndOfSourceLine(int endOfSourceLine);
+
+    public boolean equals(BugInstance bugInstance);
 }

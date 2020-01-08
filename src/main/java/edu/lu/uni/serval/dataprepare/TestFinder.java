@@ -7,106 +7,116 @@ import java.util.Comparator;
 import java.util.List;
 
 public class TestFinder {
-	static final int CLASS_SUFFIX_LENGTH = ".class".length();
-	static final int JAVA_SUFFIX_LENGTH = ".java".length();
-	private final ClassFilter tester;
-	private final ClassFinder finder;
 
-	public TestFinder(ClassFinder finder, ClassFilter tester) {
-		this.tester = tester;
-		this.finder = finder;
-	}
+    static final int CLASS_SUFFIX_LENGTH = ".class".length();
+    static final int JAVA_SUFFIX_LENGTH = ".java".length();
+    private final ClassFilter tester;
+    private final ClassFinder finder;
 
-	public Class<?>[] process() {
-		List<Class<?>> classes = new ArrayList<>();
-		String[] finderClasses = finder.getClasses();
-		int length = finderClasses.length;
+    public TestFinder(ClassFinder finder, ClassFilter tester) {
+        this.tester = tester;
+        this.finder = finder;
+    }
 
-		for (int index = 0; index < length; ++index) {
-			String fileName = finderClasses[index];
-			String className;
-			if (isJavaFile(fileName)) {//
-				className = classNameFromJava(fileName);
-			} else if (isClassFile(fileName)) {//
-				className = classNameFromFile(fileName);//
-			} else
-				continue;
-			if (!tester.acceptClassName(className))//
-				continue;
-			if (!tester.acceptInnerClass() && isInnerClass(className))//
-				continue;
+    public Class<?>[] process() {
+        List<Class<?>> classes = new ArrayList<>();
+        String[] finderClasses = finder.getClasses();
+        int length = finderClasses.length;
 
-			if (!isInnerClass(className)) {
-				try {
-					Class<?> clazz = Class.forName(className);
-					if (clazz.isLocalClass() || clazz.isAnonymousClass())
-						continue;
-					if (tester.acceptClass(clazz)) {
-						classes.add(clazz);
-					}
-				} catch (ClassNotFoundException cnfExp1) {
-					try {
-						ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-						Class<?> clazz = Class.forName(className, false, classLoader);
-						if (clazz.isLocalClass() || clazz.isAnonymousClass())
-							continue;
-						if (tester.acceptClass(clazz)) {
-							classes.add(clazz);
-						}
-					} catch (ClassNotFoundException cnfExp2) {
-						cnfExp2.printStackTrace();
-					} catch (NoClassDefFoundError ncefErr) {
-					}
-				} catch (NoClassDefFoundError ncefErr) {
-				}
-			}
-		}
-		Collections.sort(classes, new Comparator<Class<?>>() {
-			@Override
-			public int compare(Class<?> o1, Class<?> o2) {
-				return o1.getName().compareTo(o2.getName());
-			}
-		});
-		return classes.toArray(new Class[classes.size()]);
-	}
+        for (int index = 0; index < length; ++index) {
+            String fileName = finderClasses[index];
+            String className;
+            if (isJavaFile(fileName)) {//
+                className = classNameFromJava(fileName);
+            } else if (isClassFile(fileName)) {//
+                className = classNameFromFile(fileName);//
+            } else {
+                continue;
+            }
+            if (!tester.acceptClassName(className))//
+            {
+                continue;
+            }
+            if (!tester.acceptInnerClass() && isInnerClass(className))//
+            {
+                continue;
+            }
 
-	private String classNameFromJava(String fileName) {
-		String className = replaceFileSeparators(cutOffExtension(fileName, JAVA_SUFFIX_LENGTH));
-		while (className.startsWith("."))
-			className = className.substring(1);
-		return className;
-	}
+            if (!isInnerClass(className)) {
+                try {
+                    Class<?> clazz = Class.forName(className);
+                    if (clazz.isLocalClass() || clazz.isAnonymousClass()) {
+                        continue;
+                    }
+                    if (tester.acceptClass(clazz)) {
+                        classes.add(clazz);
+                    }
+                } catch (ClassNotFoundException cnfExp1) {
+                    try {
+                        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+                        Class<?> clazz = Class.forName(className, false, classLoader);
+                        if (clazz.isLocalClass() || clazz.isAnonymousClass()) {
+                            continue;
+                        }
+                        if (tester.acceptClass(clazz)) {
+                            classes.add(clazz);
+                        }
+                    } catch (ClassNotFoundException cnfExp2) {
+                        cnfExp2.printStackTrace();
+                    } catch (NoClassDefFoundError ncefErr) {
+                    }
+                } catch (NoClassDefFoundError ncefErr) {
+                }
+            }
+        }
+        Collections.sort(classes, new Comparator<Class<?>>() {
+            @Override
+            public int compare(Class<?> o1, Class<?> o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        return classes.toArray(new Class[classes.size()]);
+    }
 
-	private boolean isJavaFile(String fileName) {
-		return fileName.endsWith(".java");
-	}
+    private String classNameFromJava(String fileName) {
+        String className = replaceFileSeparators(cutOffExtension(fileName, JAVA_SUFFIX_LENGTH));
+        while (className.startsWith(".")) {
+            className = className.substring(1);
+        }
+        return className;
+    }
 
-	private boolean isInnerClass(String className) {
-		return className.contains("$");
-	}
+    private boolean isJavaFile(String fileName) {
+        return fileName.endsWith(".java");
+    }
 
-	private boolean isClassFile(String classFileName) {
-		return classFileName.endsWith(".class");
-	}
+    private boolean isInnerClass(String className) {
+        return className.contains("$");
+    }
 
-	private String classNameFromFile(String classFileName) {
-		String className = replaceFileSeparators(cutOffExtension(classFileName, CLASS_SUFFIX_LENGTH));
-		while (className.startsWith("."))
-			className = className.substring(1);
-		return className;
-	}
+    private boolean isClassFile(String classFileName) {
+        return classFileName.endsWith(".class");
+    }
 
-	private String replaceFileSeparators(String s) {
-		String result = s.replace(File.separatorChar, '.');
-		if (File.separatorChar != '/') {
-			result = result.replace('/', '.');
-		}
+    private String classNameFromFile(String classFileName) {
+        String className = replaceFileSeparators(cutOffExtension(classFileName, CLASS_SUFFIX_LENGTH));
+        while (className.startsWith(".")) {
+            className = className.substring(1);
+        }
+        return className;
+    }
 
-		return result;
-	}
+    private String replaceFileSeparators(String s) {
+        String result = s.replace(File.separatorChar, '.');
+        if (File.separatorChar != '/') {
+            result = result.replace('/', '.');
+        }
 
-	private String cutOffExtension(String classFileName, int length) {
-		return classFileName.substring(0, classFileName.length() - length);
-	}
+        return result;
+    }
+
+    private String cutOffExtension(String classFileName, int length) {
+        return classFileName.substring(0, classFileName.length() - length);
+    }
 
 }

@@ -1,23 +1,22 @@
 package edu.lu.uni.serval.jdt.tree.hash;
 
+import edu.lu.uni.serval.jdt.tree.ITree;
 import static edu.lu.uni.serval.jdt.tree.hash.HashUtils.BASE;
 import static edu.lu.uni.serval.jdt.tree.hash.HashUtils.fpow;
 import static edu.lu.uni.serval.jdt.tree.hash.HashUtils.md5;
-
 import java.util.HashMap;
 import java.util.Map;
-
-import edu.lu.uni.serval.jdt.tree.ITree;
-import edu.lu.uni.serval.jdt.tree.hash.HashUtils;
 
 public abstract class RollingHashGenerator implements HashGenerator {
 
     public void hash(ITree t) {
-        for (ITree n: t.postOrder())
-            if (n.isLeaf())
+        for (ITree n : t.postOrder()) {
+            if (n.isLeaf()) {
                 n.setHash(leafHash(n));
-            else
+            } else {
                 n.setHash(innerNodeHash(n));
+            }
+        }
     }
 
     public abstract int hashFunction(String s);
@@ -30,7 +29,7 @@ public abstract class RollingHashGenerator implements HashGenerator {
         int size = t.getSize() * 2 - 1;
         int hash = hashFunction(HashUtils.inSeed(t)) * fpow(BASE, size);
 
-        for (ITree c: t.getChildren()) {
+        for (ITree c : t.getChildren()) {
             size = size - c.getSize() * 2;
             hash += c.getHash() * fpow(BASE, size);
         }
@@ -71,7 +70,9 @@ public abstract class RollingHashGenerator implements HashGenerator {
                 int digest = (int) (Math.random() * (Integer.MAX_VALUE - 1));
                 digests.put(s, digest);
                 return digest;
-            } else return digests.get(s);
+            } else {
+                return digests.get(s);
+            }
         }
 
     }

@@ -21,12 +21,18 @@ public class Pair<E1, E2> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Pair<?, ?> pair = (Pair<?, ?>) o;
 
-        if (!firstElement.equals(pair.firstElement)) return false;
+        if (!firstElement.equals(pair.firstElement)) {
+            return false;
+        }
         return secondElement.equals(pair.secondElement);
 
     }

@@ -1,16 +1,14 @@
 package edu.lu.uni.serval.jdt.generator;
 
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.dom.AST;
-import org.eclipse.jdt.core.dom.ASTParser;
-
 import edu.lu.uni.serval.jdt.tree.TreeContext;
 import edu.lu.uni.serval.jdt.visitor.AbstractRawTokenJdtVisitor;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Map;
+import org.eclipse.jdt.core.JavaCore;
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
 
 public abstract class AbstractRawTokenJdtTreeGenerator extends TreeGenerator {
 
@@ -25,14 +23,14 @@ public abstract class AbstractRawTokenJdtTreeGenerator extends TreeGenerator {
                 buf = new char[1024];
             }
         }
-        return  fileData.toString().toCharArray();
+        return fileData.toString().toCharArray();
     }
 
     @Override
     public TreeContext generate(Reader r) throws IOException {
-    	return generate(r, ASTParser.K_COMPILATION_UNIT);
+        return generate(r, ASTParser.K_COMPILATION_UNIT);
     }
-    
+
     @Override
     public TreeContext generate(Reader r, int astParserType) throws IOException {
         ASTParser parser = ASTParser.newParser(AST.JLS8);

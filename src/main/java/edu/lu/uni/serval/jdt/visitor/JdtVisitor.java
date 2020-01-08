@@ -1,7 +1,7 @@
 package edu.lu.uni.serval.jdt.visitor;
 
+import edu.lu.uni.serval.entity.EntityType;
 import java.util.List;
-
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.AssertStatement;
 import org.eclipse.jdt.core.dom.Block;
@@ -45,25 +45,24 @@ import org.eclipse.jdt.core.dom.VariableDeclarationStatement;
 import org.eclipse.jdt.core.dom.WhileStatement;
 import org.eclipse.jdt.core.dom.WildcardType;
 
-import edu.lu.uni.serval.entity.EntityType;
-
 /**
  * AST visitor.
  */
 public class JdtVisitor extends AbstractJdtVisitor {
+
     private static final String COLON_SPACE = ": ";
     private boolean fEmptyJavaDoc;
     private boolean fInMethodDeclaration;
 
     @Override
     public boolean visit(Block node) {
-    	pushNode(node, "Block");
+        pushNode(node, "Block");
         return true;
     }
 
     @Override
     public void endVisit(Block node) {
-    	popNode();
+        popNode();
     }
 
     @SuppressWarnings("unchecked")
@@ -104,10 +103,11 @@ public class JdtVisitor extends AbstractJdtVisitor {
 
     @Override
     public void endVisit(Javadoc node) {
-        if (!fEmptyJavaDoc)
+        if (!fEmptyJavaDoc) {
             popNode();
-        else
+        } else {
             fEmptyJavaDoc = false;
+        }
     }
 
     private boolean checkEmptyJavaDoc(String doc) {
@@ -329,7 +329,7 @@ public class JdtVisitor extends AbstractJdtVisitor {
         pushNode(node, node.getName().getFullyQualifiedName());
         Expression exp = node.getInitializer();
         if (exp != null) {
-        	pushNode(exp, exp.toString());
+            pushNode(exp, exp.toString());
         }
         return false;
     }
@@ -371,14 +371,16 @@ public class JdtVisitor extends AbstractJdtVisitor {
     }
 
     private int startPosition(List<ASTNode> list) {
-        if (list.isEmpty())
+        if (list.isEmpty()) {
             return -1;
+        }
         return list.get(0).getStartPosition();
     }
 
     private int endPosition(List<ASTNode> list) {
-        if (list.isEmpty())
+        if (list.isEmpty()) {
             return 0;
+        }
         ASTNode n = list.get(list.size() - 1);
         return n.getStartPosition() + n.getLength();
     }
@@ -641,13 +643,13 @@ public class JdtVisitor extends AbstractJdtVisitor {
     @Override
     public boolean visit(VariableDeclarationStatement node) {
         pushNode(node, node.toString());
-    	Type type = node.getType();
-    	type.accept(this);
-    	List<?> fragments = node.fragments();
-    	for (Object obj : fragments) {
-    		VariableDeclarationFragment fragment = (VariableDeclarationFragment) obj;
-    		fragment.accept(this);
-    	}
+        Type type = node.getType();
+        type.accept(this);
+        List<?> fragments = node.fragments();
+        for (Object obj : fragments) {
+            VariableDeclarationFragment fragment = (VariableDeclarationFragment) obj;
+            fragment.accept(this);
+        }
         return false;
     }
 

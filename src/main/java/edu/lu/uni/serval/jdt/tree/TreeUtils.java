@@ -1,5 +1,6 @@
 package edu.lu.uni.serval.jdt.tree;
 
+import edu.lu.uni.serval.entity.Pair;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -7,54 +8,61 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import edu.lu.uni.serval.entity.Pair;
-
 public final class TreeUtils {
 
     private TreeUtils() {
     }
 
     /**
-     * Compute the depth of every node of the tree. The size is set
-     * directly on the nodes and is then accessible using {@link Tree#getSize()}.
+     * Compute the depth of every node of the tree. The size is set directly on
+     * the nodes and is then accessible using {@link Tree#getSize()}.
+     *
      * @param tree a Tree
      */
     public static void computeSize(ITree tree) {
-        for (ITree t: tree.postOrder()) {
+        for (ITree t : tree.postOrder()) {
             int size = 1;
-            if (!t.isLeaf())
-                for (ITree c: t.getChildren())
+            if (!t.isLeaf()) {
+                for (ITree c : t.getChildren()) {
                     size += c.getSize();
+                }
+            }
             t.setSize(size);
         }
     }
 
     /**
-     * Compute the depth of every node of the tree. The depth is set
-     * directly on the nodes and is then accessible using {@link Tree#getDepth()}.
+     * Compute the depth of every node of the tree. The depth is set directly on
+     * the nodes and is then accessible using {@link Tree#getDepth()}.
+     *
      * @param tree a Tree
      */
     public static void computeDepth(ITree tree) {
         List<ITree> trees = preOrder(tree);
-        for (ITree t: trees) {
+        for (ITree t : trees) {
             int depth = 0;
-            if (!t.isRoot()) depth = t.getParent().getDepth() + 1;
+            if (!t.isRoot()) {
+                depth = t.getParent().getDepth() + 1;
+            }
             t.setDepth(depth);
         }
     }
 
     /**
-     * Compute the height of every node of the tree. The height is set
-     * directly on the nodes and is then accessible using {@link Tree#getHeight()}.
+     * Compute the height of every node of the tree. The height is set directly
+     * on the nodes and is then accessible using {@link Tree#getHeight()}.
+     *
      * @param tree a Tree.
      */
     public static void computeHeight(ITree tree) {
-        for (ITree t: tree.postOrder()) {
+        for (ITree t : tree.postOrder()) {
             int height = 0;
             if (!t.isLeaf()) {
-                for (ITree c: t.getChildren()) {
+                for (ITree c : t.getChildren()) {
                     int cHeight = c.getHeight();
-                    if (cHeight > height) height = cHeight;
+                    if (cHeight > height) {
+                        height = cHeight;
+                    }
                 }
                 height++;
             }
@@ -64,6 +72,7 @@ public final class TreeUtils {
 
     /**
      * Returns a list of every subtrees and the tree ordered using a pre-order.
+     *
      * @param tree a Tree.
      */
     public static List<ITree> preOrder(ITree tree) {
@@ -74,9 +83,11 @@ public final class TreeUtils {
 
     private static void preOrder(ITree tree, List<ITree> trees) {
         trees.add(tree);
-        if (!tree.isLeaf())
-            for (ITree c: tree.getChildren())
+        if (!tree.isLeaf()) {
+            for (ITree c : tree.getChildren()) {
                 preOrder(c, trees);
+            }
+        }
     }
 
     public static void preOrderNumbering(ITree tree) {
@@ -84,7 +95,9 @@ public final class TreeUtils {
     }
 
     /**
-     * Returns a list of every subtrees and the tree ordered using a breadth-first order.
+     * Returns a list of every subtrees and the tree ordered using a
+     * breadth-first order.
+     *
      * @param tree a Tree.
      */
     public static List<ITree> breadthFirst(ITree tree) {
@@ -118,8 +131,9 @@ public final class TreeUtils {
                     Iterator<ITree> it = fifo.getFirst();
                     if (it.hasNext()) {
                         ITree item = it.next();
-                        if (!it.hasNext())
+                        if (!it.hasNext()) {
                             fifo.removeFirst();
+                        }
                         addLasts(item);
                         return item;
                     }
@@ -129,8 +143,9 @@ public final class TreeUtils {
 
             private void addLasts(ITree item) {
                 List<ITree> children = item.getChildren();
-                if (!children.isEmpty())
+                if (!children.isEmpty()) {
                     fifo.addLast(children.iterator());
+                }
             }
 
             @Override
@@ -146,12 +161,14 @@ public final class TreeUtils {
 
     public static void numbering(Iterable<ITree> iterable) {
         int i = 0;
-        for (ITree t: iterable)
+        for (ITree t : iterable) {
             t.setId(i++);
+        }
     }
 
     /**
      * Returns a list of every subtrees and the tree ordered using a post-order.
+     *
      * @param tree a Tree.
      */
     public static List<ITree> postOrder(ITree tree) {
@@ -161,15 +178,18 @@ public final class TreeUtils {
     }
 
     private static void postOrder(ITree tree, List<ITree> trees) {
-        if (!tree.isLeaf())
-            for (ITree c: tree.getChildren())
+        if (!tree.isLeaf()) {
+            for (ITree c : tree.getChildren()) {
                 postOrder(c, trees);
+            }
+        }
         trees.add(tree);
     }
 
     public static Iterator<ITree> postOrderIterator(final ITree tree) {
         return new Iterator<ITree>() {
             Deque<Pair<ITree, Iterator<ITree>>> stack = new ArrayDeque<>();
+
             {
                 push(tree);
             }
@@ -181,17 +201,20 @@ public final class TreeUtils {
 
             @Override
             public ITree next() {
-                if (stack.isEmpty())
+                if (stack.isEmpty()) {
                     throw new NoSuchElementException();
+                }
                 return selectNextChild(stack.peek().getSecond());
             }
 
             ITree selectNextChild(Iterator<ITree> it) {
-                if (!it.hasNext())
+                if (!it.hasNext()) {
                     return stack.pop().getFirst();
+                }
                 ITree item = it.next();
-                if (item.isLeaf())
+                if (item.isLeaf()) {
                     return item;
+                }
                 return selectNextChild(push(item));
             }
 
@@ -227,6 +250,7 @@ public final class TreeUtils {
     }
 
     public interface TreeVisitor {
+
         void startTree(ITree tree);
 
         void endTree(ITree tree);
@@ -235,6 +259,7 @@ public final class TreeUtils {
     public static Iterator<ITree> preOrderIterator(final ITree tree) {
         return new Iterator<ITree>() {
             Deque<Iterator<ITree>> stack = new ArrayDeque<>();
+
             {
                 push(new AbstractTree.FakeTree(tree));
             }
@@ -247,8 +272,9 @@ public final class TreeUtils {
             @Override
             public ITree next() {
                 Iterator<ITree> it = stack.peek();
-                if (it == null)
+                if (it == null) {
                     throw new NoSuchElementException();
+                }
                 ITree t = it.next();
                 while (it != null && !it.hasNext()) {
                     stack.pop();
@@ -259,8 +285,9 @@ public final class TreeUtils {
             }
 
             private void push(ITree tree) {
-                if (!tree.isLeaf())
+                if (!tree.isLeaf()) {
                     stack.push(tree.getChildren().iterator());
+                }
             }
 
             @Override
@@ -273,6 +300,7 @@ public final class TreeUtils {
     public static Iterator<ITree> leafIterator(final Iterator<ITree> it) {
         return new Iterator<ITree>() {
             ITree current = it.hasNext() ? it.next() : null;
+
             @Override
             public boolean hasNext() {
                 return current != null;
@@ -283,8 +311,9 @@ public final class TreeUtils {
                 ITree val = current;
                 while (it.hasNext()) {
                     current = it.next();
-                    if (current.isLeaf())
+                    if (current.isLeaf()) {
                         break;
+                    }
                 }
                 return val;
             }

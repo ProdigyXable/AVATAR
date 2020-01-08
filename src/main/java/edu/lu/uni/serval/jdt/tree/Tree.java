@@ -19,7 +19,9 @@ public class Tree extends AbstractTree implements ITree {
     private AssociationMap metadata;
 
     /**
-     * Constructs a new node. If you need type labels corresponding to the integer
+     * Constructs a new node. If you need type labels corresponding to the
+     * integer
+     *
      * @see TreeContext#createTree(int, String, String)
      */
     public Tree(int type, String label) {
@@ -35,7 +37,6 @@ public class Tree extends AbstractTree implements ITree {
         this.length = NO_VALUE;
         this.children = new ArrayList<>();
     }
-
 
     // Only used for cloning ...
     private Tree(Tree other) {
@@ -68,8 +69,9 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public Tree deepCopy() {
         Tree copy = new Tree(this);
-        for (ITree child : getChildren())
+        for (ITree child : getChildren()) {
             copy.addChild(child.deepCopy());
+        }
         return copy;
     }
 
@@ -106,8 +108,9 @@ public class Tree extends AbstractTree implements ITree {
     @Override
     public void setChildren(List<ITree> children) {
         this.children = children;
-        for (ITree c : children)
+        for (ITree c : children) {
             c.setParent(this);
+        }
     }
 
     @Override
@@ -127,26 +130,32 @@ public class Tree extends AbstractTree implements ITree {
 
     @Override
     public void setParentAndUpdateChildren(ITree parent) {
-        if (this.parent != null)
+        if (this.parent != null) {
             this.parent.getChildren().remove(this);
+        }
         this.parent = parent;
-        if (this.parent != null)
+        if (this.parent != null) {
             parent.getChildren().add(this);
+        }
     }
 
     /**
-     * Reset its parent and insert it to the specific position in the new parent.
+     * Reset its parent and insert it to the specific position in the new
+     * parent.
+     *
      * @param parent
      * @param position
      */
     public void setParentAndUpdateChildren(ITree parent, int position) {
-        if (this.parent != null)
+        if (this.parent != null) {
             this.parent.getChildren().remove(this);
+        }
         this.parent = parent;
-        if (this.parent != null)
+        if (this.parent != null) {
             parent.insertChild(this, position);
+        }
     }
-    
+
     @Override
     public void setPos(int pos) {
         this.pos = pos;
@@ -159,34 +168,38 @@ public class Tree extends AbstractTree implements ITree {
 
     @Override
     public Object getMetadata(String key) {
-        if (metadata == null)
+        if (metadata == null) {
             return null;
+        }
         return metadata.get(key);
     }
 
     @Override
     public Object setMetadata(String key, Object value) {
         if (value == null) {
-            if (metadata == null)
+            if (metadata == null) {
                 return null;
-            else
+            } else {
                 return metadata.remove(key);
+            }
         }
-        if (metadata == null)
+        if (metadata == null) {
             metadata = new AssociationMap();
+        }
         return metadata.set(key, value);
     }
 
     @Override
     public Iterator<Entry<String, Object>> getMetadata() {
-        if (metadata == null)
+        if (metadata == null) {
             return new EmptyEntryIterator();
+        }
         return metadata.iterator();
     }
 
-	@Override
-	public int getEndPos() {
-		return pos + length;
-	}
+    @Override
+    public int getEndPos() {
+        return pos + length;
+    }
 
 }

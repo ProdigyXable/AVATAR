@@ -1,5 +1,6 @@
 package edu.lu.uni.serval.utils;
 
+import edu.lu.uni.serval.config.Configuration;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
@@ -15,67 +16,64 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import edu.lu.uni.serval.config.Configuration;
-
 public class ShellUtils {
 
-	public static String shellRun(List<String> asList, String buggyProject) throws IOException {
-		String fileName;
+    public static String shellRun(List<String> asList, String buggyProject) throws IOException {
+        String fileName;
         String cmd;
-        if (System.getProperty("os.name").toLowerCase().startsWith("win")){
+        if (System.getProperty("os.name").toLowerCase().startsWith("win")) {
             fileName = Configuration.TEMP_FILES_PATH + buggyProject + ".bat";
             cmd = Configuration.TEMP_FILES_PATH + buggyProject + ".bat";
-        }
-        else {
+        } else {
             fileName = Configuration.TEMP_FILES_PATH + buggyProject + ".sh";
             cmd = "bash " + fileName;
         }
         File batFile = new File(fileName);
-        if (!batFile.exists()){
-        	if (!batFile.getParentFile().exists()) {
-        		batFile.getParentFile().mkdirs();
-        	}
+        if (!batFile.exists()) {
+            if (!batFile.getParentFile().exists()) {
+                batFile.getParentFile().mkdirs();
+            }
             boolean result = batFile.createNewFile();
-            if (!result){
+            if (!result) {
                 throw new IOException("Cannot Create bat file:" + fileName);
             }
         }
         FileOutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(batFile);
-            for (String arg: asList){
+            for (String arg : asList) {
                 outputStream.write(arg.getBytes());
             }
-        } catch (IOException e){
-            if (outputStream != null){
+        } catch (IOException e) {
+            if (outputStream != null) {
                 outputStream.close();
             }
         }
         batFile.deleteOnExit();
-        
-        Process process= Runtime.getRuntime().exec(cmd);
+
+        Process process = Runtime.getRuntime().exec(cmd);
         String results = ShellUtils.getShellOut(process);
         batFile.delete();
         return results;
-	}
+    }
 
-	private static String getShellOut(Process process) {
-		ExecutorService service = Executors.newSingleThreadExecutor();
+    private static String getShellOut(Process process) {
+        ExecutorService service = Executors.newSingleThreadExecutor();
         Future<String> future = service.submit(new ReadShellProcess(process));
         String returnString = "";
         try {
             returnString = future.get(Configuration.SHELL_RUN_TIMEOUT, TimeUnit.SECONDS);
-        } catch (InterruptedException e){
+        } catch (InterruptedException e) {
             future.cancel(true);
             e.printStackTrace();
             shutdownProcess(service, process);
             return "";
-        } catch (TimeoutException e){
+        } catch (TimeoutException e) {
             future.cancel(true);
             e.printStackTrace();
             shutdownProcess(service, process);
             return "";
-        } catch (ExecutionException e){
+        } catch (ExecutionException e) {
             future.cancel(true);
             e.printStackTrace();
             shutdownProcess(service, process);
@@ -84,22 +82,23 @@ public class ShellUtils {
             shutdownProcess(service, process);
         }
         return returnString;
-	}
+    }
 
-	private static void shutdownProcess(ExecutorService service, Process process) {
-		service.shutdownNow();
+    private static void shutdownProcess(ExecutorService service, Process process) {
+        service.shutdownNow();
         try {
-			process.getErrorStream().close();
-			process.getInputStream().close();
-	        process.getOutputStream().close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+            process.getErrorStream().close();
+            process.getInputStream().close();
+            process.getOutputStream().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         process.destroy();
-	}
+    }
 }
 
 class ReadShellProcess implements Callable<String> {
+
     public Process process;
 
     public ReadShellProcess(Process p) {
@@ -114,9 +113,9 @@ class ReadShellProcess implements Callable<String> {
             String s;
             in = new BufferedInputStream(process.getInputStream());
             br = new BufferedReader(new InputStreamReader(in));
-            while ((s = br.readLine()) != null && s.length()!=0) {
-                if (sb.length() < 1000000){
-                    if (Thread.interrupted()){
+            while ((s = br.readLine()) != null && s.length() != 0) {
+                if (sb.length() < 1000000) {
+                    if (Thread.interrupted()) {
                         return sb.toString();
                     }
                     sb.append(System.getProperty("line.separator"));
@@ -125,28 +124,28 @@ class ReadShellProcess implements Callable<String> {
             }
             in = new BufferedInputStream(process.getErrorStream());
             br = new BufferedReader(new InputStreamReader(in));
-            while ((s = br.readLine()) != null && s.length()!=0) {
-                if (Thread.interrupted()){
+            while ((s = br.readLine()) != null && s.length() != 0) {
+                if (Thread.interrupted()) {
                     return sb.toString();
                 }
-                if (sb.length() < 1000000){
+                if (sb.length() < 1000000) {
                     sb.append(System.getProperty("line.separator"));
                     sb.append(s);
                 }
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if (br != null){
+            if (br != null) {
                 try {
                     br.close();
-                } catch (IOException e){
+                } catch (IOException e) {
                 }
             }
-            if (in != null){
+            if (in != null) {
                 try {
                     in.close();
-                } catch (IOException e){
+                } catch (IOException e) {
                 }
             }
             process.destroy();

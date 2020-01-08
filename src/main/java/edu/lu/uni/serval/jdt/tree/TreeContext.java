@@ -18,7 +18,6 @@ public class TreeContext {
     private final Map<String, Object> metadata = new HashMap<>();
 
 //    private final MetadataSerializers serializers = new MetadataSerializers();
-
     private ITree root;
 
     @Override
@@ -40,19 +39,23 @@ public class TreeContext {
 
     public String getTypeLabel(int type) {
         String tl = typeLabels.get(type);
-        if (tl == null)
+        if (tl == null) {
             tl = Integer.toString(type);
+        }
         return tl;
     }
 
     protected void registerTypeLabel(int type, String labelStr) {
         if (labelStr == null || labelStr.equals(ITree.NO_LABEL)) // FIXME: here might be buggy.
+        {
             return;
+        }
         String typeLabel = typeLabels.get(type);
-        if (typeLabel == null)
+        if (typeLabel == null) {
             typeLabels.put(type, labelStr);
-        else if (!typeLabel.equals(labelStr))
+        } else if (!typeLabel.equals(labelStr)) {
             throw new RuntimeException(String.format("Redefining type %d: '%s' with '%s'", type, typeLabel, labelStr));
+        }
     }
 
     public ITree createTree(int type, String label, String typeLabel) {//TODO: why does it use different label?
@@ -75,8 +78,8 @@ public class TreeContext {
     }
 
     /**
-     * Get a global metadata.
-     * There is no way to know if the metadata is really null or does not exists.
+     * Get a global metadata. There is no way to know if the metadata is really
+     * null or does not exists.
      *
      * @param key of metadata
      * @return the metadata or null if not found
@@ -87,22 +90,24 @@ public class TreeContext {
 
     /**
      * Get a local metadata, if available. Otherwise get a global metadata.
-     * There is no way to know if the metadata is really null or does not exists.
+     * There is no way to know if the metadata is really null or does not
+     * exists.
      *
      * @param key of metadata
      * @return the metadata or null if not found
      */
     public Object getMetadata(ITree node, String key) {
         Object metadata;
-        if (node == null || (metadata = node.getMetadata(key)) == null)
+        if (node == null || (metadata = node.getMetadata(key)) == null) {
             return getMetadata(key);
+        }
         return metadata;
     }
 
     /**
      * Store a global metadata.
      *
-     * @param key   of the metadata
+     * @param key of the metadata
      * @param value of the metadata
      * @return the previous value of metadata if existed or null
      */
@@ -113,17 +118,18 @@ public class TreeContext {
     /**
      * Store a local metadata
      *
-     * @param key   of the metadata
+     * @param key of the metadata
      * @param value of the metadata
      * @return the previous value of metadata if existed or null
      */
     public Object setMetadata(ITree node, String key, Object value) {
-        if (node == null)
+        if (node == null) {
             return setMetadata(key, value);
-        else {
+        } else {
             Object res = node.setMetadata(key, value);
-            if (res == null)
+            if (res == null) {
                 return getMetadata(key);
+            }
             return res;
         }
     }
@@ -151,7 +157,6 @@ public class TreeContext {
 //        serializers.add(key, s);
 //        return this;
 //    }
-
     public TreeContext export(String... name) {
 //        for (String n : name)
 //            serializers.add(n, x -> x.toString());
@@ -168,12 +173,13 @@ public class TreeContext {
     }
 
     /**
-     * Get an iterator on local and global metadata.
-     * To only get local metadata, simply use : `node.getMetadata()`
+     * Get an iterator on local and global metadata. To only get local metadata,
+     * simply use : `node.getMetadata()`
      */
     public Iterator<Entry<String, Object>> getMetadata(final ITree node) {
-        if (node == null)
+        if (node == null) {
             return getMetadata();
+        }
         return new Iterator<Entry<String, Object>>() {
             final Iterator<Entry<String, Object>> localIterator = node.getMetadata();
             final Iterator<Entry<String, Object>> globalIterator = getMetadata();
@@ -215,15 +221,16 @@ public class TreeContext {
                 return n;
             }
 
-			@Override
-			public void remove() {
-				// TODO Auto-generated method stub
-				
-			}
+            @Override
+            public void remove() {
+                // TODO Auto-generated method stub
+
+            }
         };
     }
 
     public static class Marshallers<E> {
+
         Map<String, E> serializers = new HashMap<>();
 
         public static final Pattern valid_id = Pattern.compile("[a-zA-Z0-9_]*");
@@ -235,10 +242,11 @@ public class TreeContext {
 //        public void addAll(Map<String, E> serializers) {
 //            serializers.forEach((k, s) -> add(k, s));
 //        }
-
         public void add(String name, E serializer) {
             if (!valid_id.matcher(name).matches()) // TODO I definitely don't like this rule, we should think twice
+            {
                 throw new RuntimeException("Invalid key for serialization");
+            }
             serializers.put(name, serializer);
         }
 

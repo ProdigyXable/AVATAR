@@ -6,30 +6,31 @@ import java.util.List;
 
 public class TestUtils {
 
-
-	public static int getFailTestNumInProject(String projectName, String defects4jPath, List<String> failedTests){
+    public static int getFailTestNumInProject(String projectName, String defects4jPath, List<String> failedTests) {
         String testResult = getDefects4jResult(projectName, defects4jPath, "test");
-        if (testResult.equals("")){//error occurs in run
+        if (testResult.equals("")) {//error occurs in run
             return Integer.MAX_VALUE;
         }
-        if (!testResult.contains("Failing tests:")){
+        if (!testResult.contains("Failing tests:")) {
             return Integer.MAX_VALUE;
         }
         int errorNum = 0;
         String[] lines = testResult.trim().split("\n");
-        for (String lineString: lines){
-            if (lineString.startsWith("Failing tests:")){
-                errorNum =  Integer.valueOf(lineString.split(":")[1].trim());
-                if (errorNum == 0) break;
+        for (String lineString : lines) {
+            if (lineString.startsWith("Failing tests:")) {
+                errorNum = Integer.valueOf(lineString.split(":")[1].trim());
+                if (errorNum == 0) {
+                    break;
+                }
             } else if (lineString.startsWith("Running ")) {
-            	break;
+                break;
             } else {
-            	failedTests.add(lineString.trim());
+                failedTests.add(lineString.trim());
             }
         }
         return errorNum;
-	}
-	
+    }
+
 //	public static int getFailTestNumInProject(String buggyProject, List<String> failedTests, String classPath,
 //			String testClassPath, String[] testCasesArray){
 //		StringBuilder builder = new StringBuilder();
@@ -66,46 +67,49 @@ public class TestUtils {
 //        }
 //        return errorNum;
 //	}
-	
-	public static int compileProjectWithDefects4j(String projectName, String defects4jPath) {
-		String compileResults = getDefects4jResult(projectName, defects4jPath, "compile");
-		String[] lines = compileResults.split("\n");
-		if (lines.length != 2) return 1;
-        for (String lineString: lines){
-        	if (!lineString.endsWith("OK")) return 1;
+    public static int compileProjectWithDefects4j(String projectName, String defects4jPath) {
+        String compileResults = getDefects4jResult(projectName, defects4jPath, "compile");
+        String[] lines = compileResults.split("\n");
+        if (lines.length != 2) {
+            return 1;
         }
-		return 0;
-	}
+        for (String lineString : lines) {
+            if (!lineString.endsWith("OK")) {
+                return 1;
+            }
+        }
+        return 0;
+    }
 
-	private static String getDefects4jResult(String projectName, String defects4jPath, String cmdType) {
-		try {
-			String buggyProject = projectName.substring(projectName.lastIndexOf("/") + 1);
-			//which java\njava -version\n
+    private static String getDefects4jResult(String projectName, String defects4jPath, String cmdType) {
+        try {
+            String buggyProject = projectName.substring(projectName.lastIndexOf("/") + 1);
+            //which java\njava -version\n
             String result = ShellUtils.shellRun(Arrays.asList("cd " + projectName + "\n", defects4jPath + "framework/bin/defects4j " + cmdType + "\n"), buggyProject);//"defects4j " + cmdType + "\n"));//
             return result.trim();
-        } catch (IOException e){
-        	e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
             return "";
         }
-	}
+    }
 
-	public static String recoverWithGitCmd(String projectName) {
-		try {
-			String buggyProject = projectName.substring(projectName.lastIndexOf("/") + 1);
+    public static String recoverWithGitCmd(String projectName) {
+        try {
+            String buggyProject = projectName.substring(projectName.lastIndexOf("/") + 1);
             ShellUtils.shellRun(Arrays.asList("cd " + projectName + "\n", "git checkout -- ."), buggyProject);
             return "";
-        } catch (IOException e){
+        } catch (IOException e) {
             return "Failed to recover.";
         }
-	}
+    }
 
-	public static String readPatch(String projectName) {
-		try {
-			String buggyProject = projectName.substring(projectName.lastIndexOf("/") + 1);
+    public static String readPatch(String projectName) {
+        try {
+            String buggyProject = projectName.substring(projectName.lastIndexOf("/") + 1);
             return ShellUtils.shellRun(Arrays.asList("cd " + projectName + "\n", "git diff"), buggyProject).trim();
-        } catch (IOException e){
+        } catch (IOException e) {
             return null;
         }
-	}
+    }
 
 }
