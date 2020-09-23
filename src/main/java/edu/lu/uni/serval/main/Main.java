@@ -24,7 +24,7 @@ public class Main {
         Configuration.faultLocalizationMetric = args[3];
         Configuration.outputPath += "FL/";
         System.out.println(projectName);
-        fixBug(buggyProjectsPath, defects4jPath, projectName, args[5], args[6], args[7]);
+        fixBug(buggyProjectsPath, defects4jPath, projectName, args[4], args[5], args[6]);
         System.exit(0);
     }
 
@@ -51,15 +51,7 @@ public class Main {
             return;
         }
 
-        if (fixer.proflEnabled) {
-            fixer.saveGeneralSbfl();
-        }
-
         fixer.fixProcess();
-
-        if (fixer.proflEnabled) {
-            fixer.saveProflRanking();
-        }
 
         int fixedStatus = fixer.fixedStatus;
         switch (fixedStatus) {
